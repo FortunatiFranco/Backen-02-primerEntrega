@@ -11,11 +11,6 @@ export function generateToken(user) {
     return jwt.sign(user, "tokensecreto");
 }
 
-/*export function validateToken(token, secret) {
-    return jwt.verify(token, secret);
-}
-*/
-
 export function hashPassword(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 }

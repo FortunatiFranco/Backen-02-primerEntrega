@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { customPassportCall } from "../util.js";
-//import { validateJwtSessions } from "../middlewares/sessions.middlewares.js";
+
 
 const router = Router();
 
@@ -16,7 +16,6 @@ router.get("error-register", async (req, res) => {
     res.send("El registro fallo.");
 })
 
-// router.use(validateJwtSessions);
 router.use(customPassportCall("jwt"));
 
 router.get("/profile", async (req, res) => {
