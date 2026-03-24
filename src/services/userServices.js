@@ -1,3 +1,5 @@
+import userDAO from "../models/dao/userMongoDAO.js";
+
 class userServices {
     constructor(dao) {
         this.dao = dao;
@@ -23,3 +25,5 @@ class userServices {
         return await this.dao.delete(email)
     }
 }
+
+export default new userServices(userDAO)
