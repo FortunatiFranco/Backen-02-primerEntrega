@@ -1,5 +1,5 @@
 import MongoStore from "connect-mongo";
-import { env } from "./env";
+import { env } from "./env.js";
 
 export const sessionConfig = {
     cookie: {

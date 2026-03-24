@@ -1,9 +1,9 @@
 import passport from "passport"
 import { Strategy as localStrategy } from "passport-local";
-import { userModel } from "../models/users-model.js";
 import { cookieExtractor, hashPassword, verifyPassword } from "../util.js";
 import { ExtractJwt, Strategy as jwtStrategy } from "passport-jwt";
 import { env } from "./env.js";
+import userDAO from '../models/dao/userMongoDAO.js'
 
 
 function initializePassport() {
@@ -15,13 +15,13 @@ function initializePassport() {
         async (req, email, password, done) => {
             try {
                 const user = req.body;
-                const userExist = await userModel.findOne({ email });
+                const userExist = await userDAO.getByEmail({ email });
                 if (userExist) {
                     console.log("Usuario ya existente");
                     return done(null, false);
                 }
                 const hashedPassword = hashPassword(password);
-                const newUser = await userModel.create({ ...user, password: hashedPassword })
+                const newUser = await userDAO.create({ ...user, password: hashedPassword })
                 return done(null, newUser);
             } catch (error) {
                 console.error(error);
@@ -34,7 +34,7 @@ function initializePassport() {
     },
         async (email, password, done) => {
             try {
-                const user = await userModel.findOne({ email }).lean();
+                const user = await userDAO.getByEmail({ email });
                 if (!user) {
                     return done(null, false);
                 }
@@ -64,7 +64,7 @@ function initializePassport() {
         return done(null, user._id);
     });
     passport.deserializeUser(async (id, done) => {
-        const user = await userModel.findById(id).lean();
+        const user = await userDAO.getById(id);
         return done(null, user);
     });
 }

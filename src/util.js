@@ -3,7 +3,7 @@ import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import passport from "passport";
-import { env } from "./config/env";
+import { env } from "./config/env.js";
 
 const filePath = fileURLToPath(import.meta.url);
 const __dirname = dirname(filePath);
