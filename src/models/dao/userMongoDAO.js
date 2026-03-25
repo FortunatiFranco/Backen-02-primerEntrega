@@ -6,7 +6,7 @@ class userDAO {
     }
 
     async getByEmail(email) {
-        return await userModel.find({ email }).lean();
+        return await userModel.findOne({ email }).lean();
     }
 
     async getById(id) {

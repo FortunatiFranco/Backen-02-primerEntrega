@@ -1,7 +1,8 @@
 import { generateToken } from "../util.js";
+import { UsersDTO } from "../models/dto/UsersDTO.js";
 
 export async function current(req, res) {
-    res.send(req.user);
+    res.send(new UsersDTO().sessionData(req.user));
 }
 
 export async function controllerLogin(req, res) {

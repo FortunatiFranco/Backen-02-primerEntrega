@@ -1,9 +1,11 @@
 import passport from "passport"
 import { Strategy as localStrategy } from "passport-local";
-import { cookieExtractor, hashPassword, verifyPassword } from "../util.js";
+import userDAO from "../models/dao/UserMongoDAO.js";
+import { cookieExtractor, verifyPassword } from "../util.js";
 import { ExtractJwt, Strategy as jwtStrategy } from "passport-jwt";
 import { env } from "./env.js";
-import userDAO from '../models/dao/userMongoDAO.js'
+import { UsersDTO } from "../models/dto/UsersDTO.js";
+
 
 
 function initializePassport() {
@@ -15,13 +17,12 @@ function initializePassport() {
         async (req, email, password, done) => {
             try {
                 const user = req.body;
-                const userExist = await userDAO.getByEmail({ email });
+                const userExist = await userDAO.getByEmail(email);
                 if (userExist) {
                     console.log("Usuario ya existente");
                     return done(null, false);
                 }
-                const hashedPassword = hashPassword(password);
-                const newUser = await userDAO.create({ ...user, password: hashedPassword })
+                const newUser = await userDAO.create(new UsersDTO().saveUser(user))
                 return done(null, newUser);
             } catch (error) {
                 console.error(error);
@@ -34,7 +35,7 @@ function initializePassport() {
     },
         async (email, password, done) => {
             try {
-                const user = await userDAO.getByEmail({ email });
+                const user = await userDAO.getByEmail(email);
                 if (!user) {
                     return done(null, false);
                 }
